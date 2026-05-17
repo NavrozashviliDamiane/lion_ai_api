@@ -1,9 +1,9 @@
 
 # Stage 1: Build using JDK 21
-FROM openjdk:21-jdk-slim AS build
+FROM eclipse-temurin:21-jdk-alpine AS build
 
 # Install Maven
-RUN apt-get update && apt-get install -y maven
+RUN apk add --no-cache maven
 
 WORKDIR /app
 COPY . .
@@ -12,7 +12,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
